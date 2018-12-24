@@ -14,7 +14,7 @@ DECK_DIR = os.path.expanduser(
 
 ANKDOWN = os.path.expanduser(
         mw.addonManager.getConfig(__name__).get(
-            "Ankdown Location", "~/.local/bin/ankdown))
+            "Ankdown Location", "~/.local/bin/ankdown"))
 
 PACKAGE_NAME = "ankdown.apkg"
 
