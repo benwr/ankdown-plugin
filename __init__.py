@@ -22,7 +22,6 @@ def importDecks():
         raise(ValueError("{} is not a directory".format(DECK_DIR)))
 
     os.chdir(os.path.join(os.path.split(__file__)[0], "user_files"))
-    showInfo("moved into " + os.getcwd())
 
     # NOTE this loop is because ankdown can't easily create multiple decks
     # - genanki ends up lumping them all together. Maybe one day when that
