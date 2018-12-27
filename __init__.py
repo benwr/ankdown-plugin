@@ -16,7 +16,6 @@ ANKDOWN = os.path.expanduser(
         mw.addonManager.getConfig(__name__).get(
             "Ankdown Location", "~/.local/bin/ankdown"))
 
-PACKAGE_NAME = "ankdown.apkg"
 
 def importDecks():
     if not os.path.isdir(DECK_DIR):
@@ -24,9 +23,19 @@ def importDecks():
 
     os.chdir(os.path.join(os.path.split(__file__)[0], "user_files"))
 
-    subprocess.run([ANKDOWN, "-r", DECK_DIR, "-p", PACKAGE_NAME, "-D"])
+    # NOTE this loop is because ankdown can't easily create multiple decks
+    # - genanki ends up lumping them all together. Maybe one day when that
+    # bug is fixed, we can call ankdown once.
 
-    AnkiPackageImporter(mw.col, PACKAGE_NAME).run()
+    for (d, subds, fns) in os.walk(DECK_DIR):
+        if not any([fn.endswith(".md") for fn in fns]):
+            continue
+
+        package_name = os.basename(d)
+
+        subprocess.run([ANKDOWN, "-r", d, "-p", package_name, "-D"])
+
+        AnkiPackageImporter(mw.col, package_name).run()
 
 
 def wrapImportDecks():
