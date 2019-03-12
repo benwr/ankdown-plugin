@@ -16,6 +16,9 @@ ANKDOWN = os.path.expanduser(
         mw.addonManager.getConfig(__name__).get(
             "Ankdown Location", "~/.local/bin/ankdown"))
 
+CSS = os.path.expanduser(
+        mw.addonManager.getConfig(__name__).get("CSS", "None"))
+
 
 def importDecks():
     if not os.path.isdir(DECK_DIR):
@@ -33,7 +36,10 @@ def importDecks():
 
         package_name = os.path.basename(d) + ".apkg"
 
-        subprocess.run([ANKDOWN, "-r", d, "-p", package_name])
+        subprocess_cmd = [ANKDOWN, "-r", d, "-p", package_name]
+        if CSS is not "None":
+            subprocess_cmd.extend(["-css", CSS])
+        subprocess.run(subprocess_cmd)
 
         AnkiPackageImporter(mw.col, package_name).run()
 
